@@ -5,16 +5,19 @@ import continuations.{Continuation, ContinuationInterceptor}
 import scala.concurrent.ExecutionContext
 
 abstract class BaseContinuationImpl(
-    val completion: Continuation[Any | Null] | Null
+  val completion: Continuation[Any | Null] | Null,
+  icontext: Tuple
 ) extends Continuation[Any | Null],
       ContinuationStackFrame,
       Serializable:
-
+  override type Ctx = Tuple
+  override def context() = icontext
   override val executionContext: ExecutionContext =
     if completion == null then throw RuntimeException("resume called with no completion")
     else completion.executionContext
   final override def resume(result: Any | Null): Unit = resumeAux(Right(result))
-  final override def raise(error: Throwable): Unit = resumeAux(Left(error))
+  final override def raise(error: Throwable): Unit =
+    resumeAux(Left(error))
 
   private def resumeAux(result: Either[Throwable, Any | Null]): Unit = {
     var current = this
@@ -35,8 +38,12 @@ abstract class BaseContinuationImpl(
         case base: BaseContinuationImpl =>
           current = base
           param = outcome
+           println(s"base raise/resume")
+          outcome.fold(current.raise, current.resume)
+          return
         case _ =>
-          completion.resume(outcome)
+          println(s"completion raise/resume")
+          outcome.fold(completion.raise, completion.resume)
           return
   }
 
@@ -64,9 +71,10 @@ abstract class BaseContinuationImpl(
  */
 abstract class ContinuationImpl(
     completion: Continuation[Any | Null],
-    override val context: Tuple
-) extends BaseContinuationImpl(completion):
+    icontext: Tuple
+) extends BaseContinuationImpl(completion, icontext):
   override type Ctx = Tuple
+  override def context() = icontext
   override val executionContext: ExecutionContext = completion.executionContext
   private var _intercepted: Continuation[Any | Null] = null
 
