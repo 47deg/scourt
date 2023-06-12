@@ -717,7 +717,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program: Any = {
            |  def foo()(using Suspend): Int = {
@@ -732,7 +732,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program: Any = {
            |  def foo(): Suspend ?=> Int = {
@@ -770,7 +770,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program: Any = {
            |  def foo(x: Int)(using Suspend): Int = {
@@ -933,7 +933,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program: Any = {
            |  def foo()(using Suspend): Int = {
@@ -954,7 +954,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program: Any = {
            |  def foo(): Suspend ?=> Int = {
@@ -1088,7 +1088,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |import scala.concurrent.ExecutionContext
            |import concurrent.ExecutionContext.Implicits.global
            |
@@ -1102,7 +1102,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |import scala.concurrent.ExecutionContext
            |import concurrent.ExecutionContext.Implicits.global
            |
@@ -1117,7 +1117,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
       val expectedNoSuspend =
         """|
            |package continuations {
-           |  import continuations.jvm.internal.SuspendApp
+           |  import continuations.SuspendApp
            |  import scala.concurrent.ExecutionContext
            |  import concurrent.ExecutionContext.Implicits.global
            |  final lazy module val compileFromStringpackage:
@@ -1131,13 +1131,13 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
            |    def program: Any =
            |      {
            |        def foo(x: A, y: B, z: String, ec: concurrent.ExecutionContext, completion: continuations.Continuation[A | Any]): Any = x
-           |        continuations.jvm.internal.SuspendApp.apply(
+           |        continuations.SuspendApp.apply(
            |          {
-           |            private final class $anon() extends continuations.jvm.internal.Starter {
+           |            private final class $anon() extends continuations.Starter {
            |              override def invoke[A](completion: continuations.Continuation[A]): A | Any | Null =
            |                foo(1, 2, "A", concurrent.ExecutionContext.Implicits.global, completion)
            |            }
-           |            new continuations.jvm.internal.Starter {...}
+           |            new continuations.Starter {...}
            |          }
            |        )
            |      }
@@ -1148,7 +1148,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
       val expectedSuspend =
         """|
            |package continuations {
-           |  import continuations.jvm.internal.SuspendApp
+           |  import continuations.SuspendApp
            |  import scala.concurrent.ExecutionContext
            |  import concurrent.ExecutionContext.Implicits.global
            |  final lazy module val compileFromStringpackage:
@@ -1173,13 +1173,13 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
            |            }
            |            safeContinuation.getOrThrow()
            |          }
-           |        continuations.jvm.internal.SuspendApp.apply(
+           |        continuations.SuspendApp.apply(
            |          {
-           |            private final class $anon() extends continuations.jvm.internal.Starter {
+           |            private final class $anon() extends continuations.Starter {
            |              override def invoke[A](completion: continuations.Continuation[A]): A | Any | Null =
            |                foo(1, 2, "A", concurrent.ExecutionContext.Implicits.global, completion)
            |            }
-           |            new continuations.jvm.internal.Starter {...}
+           |            new continuations.Starter {...}
            |          }
            |        )
            |      }
@@ -1432,7 +1432,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
         """|
            |package continuations
            |
-           |import continuations.jvm.internal.SuspendApp
+           |import continuations.SuspendApp
            |
            |def program = {
            |  case class Foo(i: Int)
@@ -1445,7 +1445,7 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
       val expected =
         """|
            |package continuations {
-           |  import continuations.jvm.internal.SuspendApp
+           |  import continuations.SuspendApp
            |  final lazy module val compileFromStringpackage:
            |    continuations.compileFromStringpackage =
            |    new continuations.compileFromStringpackage()
@@ -1503,12 +1503,12 @@ class ContinuationsPluginSuite extends FunSuite, CompilerFixtures, StateMachineF
            |            new Foo(x$0.productElement(0).$asInstanceOf[Int])
            |        }
            |        def foo(a: A, completion: continuations.Continuation[A | Any]): Any = a
-           |        continuations.jvm.internal.SuspendApp.apply(
+           |        continuations.SuspendApp.apply(
            |          {
-           |            private final class $anon() extends continuations.jvm.internal.Starter {
+           |            private final class $anon() extends continuations.Starter {
            |              override def invoke[A](completion: continuations.Continuation[A]): A | Any | Null = foo(Foo.apply(1), completion)
            |            }
-           |            new continuations.jvm.internal.Starter {...}
+           |            new continuations.Starter {...}
            |          }
            |        )
            |      }

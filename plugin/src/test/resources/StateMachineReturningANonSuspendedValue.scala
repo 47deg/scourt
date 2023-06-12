@@ -1,5 +1,5 @@
 package continuations {
-  import continuations.jvm.internal.SuspendApp
+  import continuations.SuspendApp
   final lazy module val compileFromStringpackage: 
     continuations.compileFromStringpackage = 
     new continuations.compileFromStringpackage()
@@ -10,8 +10,8 @@ package continuations {
       new scala.runtime.ModuleSerializationProxy(classOf[continuations.compileFromStringpackage.type])
     def program: Any =
       {
-        private class $foo$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.jvm.internal.ContinuationImpl(
-          $completion, $completion.context) {
+        private class $foo$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.ContinuationImpl($completion,
+          $completion.context) {
           var $result: Either[Throwable, Any | Null | continuations.Continuation.State.Suspended.type] = _
           var $label: Int = _
           def $result_=(x$0: Either[Throwable, Any | Null | (continuations.Continuation.State.Suspended : continuations.Continuation.State)]): Unit
@@ -25,7 +25,7 @@ package continuations {
               foo(this)
             }
           override def create(value: Any | Null, completion: continuations.Continuation[Any | Null]): continuations.Continuation[Unit] =
-            new continuations.jvm.internal.BaseContinuationImpl(completion)
+            new continuations.BaseContinuationImpl(completion)
         }
         def foo(completion: continuations.Continuation[Int]): 
           Int | Null | (continuations.Continuation.State.Suspended : continuations.Continuation.State) =
@@ -81,12 +81,12 @@ package continuations {
             println("End")
             10
           }
-        continuations.jvm.internal.SuspendApp.apply(
+        continuations.SuspendApp.apply(
           {
-            private final class $anon() extends continuations.jvm.internal.Starter {
+            private final class $anon() extends continuations.Starter {
               override def invoke[A](completion: continuations.Continuation[A]): A | Any | Null = foo(completion)
             }
-            new continuations.jvm.internal.Starter {...}
+            new continuations.Starter {...}
           }
         )
       }

@@ -45,7 +45,7 @@ class ContinuationsChainedTwoArgs extends FunSuite, CompilerFixtures, StateMachi
         """
           |package continuations
           |
-          |import continuations.jvm.internal.SuspendApp
+          |import continuations.SuspendApp
           |
           |case class Foo(x: Int)
           |
@@ -77,7 +77,7 @@ class ContinuationsChainedTwoArgs extends FunSuite, CompilerFixtures, StateMachi
         """
           |package continuations
           |
-          |import continuations.jvm.internal.SuspendApp
+          |import continuations.SuspendApp
           |
           |case class Foo(x: Int)
           |case class Bar(x: Int)

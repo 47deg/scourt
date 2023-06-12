@@ -7,7 +7,7 @@ package continuations {
     this: continuations.compileFromStringpackage.type =>
     private def writeReplace(): AnyRef =
       new scala.runtime.ModuleSerializationProxy(classOf[continuations.compileFromStringpackage.type])
-    private class $foo$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.jvm.internal.ContinuationImpl($completion,
+    private class $foo$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.ContinuationImpl($completion,
       $completion.context) {
       var I$0: Any = _
       var I$1: Any = _
@@ -25,7 +25,7 @@ package continuations {
           continuations.compileFromStringpackage.foo(null, this)
         }
       override def create(value: Any | Null, completion: continuations.Continuation[Any | Null]): continuations.Continuation[Unit] =
-        new continuations.jvm.internal.BaseContinuationImpl(completion)
+        new continuations.BaseContinuationImpl(completion)
     }
     def foo(x: Int, completion: continuations.Continuation[Int]):
       Int | Null | (continuations.Continuation.State.Suspended : continuations.Continuation.State) =

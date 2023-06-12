@@ -1,8 +1,4 @@
-package continuations.jvm.internal
-
-import continuations.*
-import continuations.intrinsics.startContinuation
-import continuations.jvm.internal
+package continuations
 
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{CountDownLatch, Executors, ThreadFactory}

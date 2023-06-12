@@ -1,4 +1,4 @@
-package continuations.jvm.internal
+package continuations
 
 trait ContinuationStackFrame:
   def callerFrame: ContinuationStackFrame | Null

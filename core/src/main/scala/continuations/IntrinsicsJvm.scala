@@ -1,9 +1,6 @@
-package continuations.intrinsics
+package continuations
 
-import continuations.{rethrow, void}
-import continuations.jvm.internal.{BaseContinuationImpl, ContinuationImpl, Starter}
-import continuations.{Continuation, RestrictedContinuation, Suspend}
-import continuations.Continuation.State.*
+import Continuation.State.*
 import scala.concurrent.ExecutionContext
 
 extension [A](continuation: Continuation[A])

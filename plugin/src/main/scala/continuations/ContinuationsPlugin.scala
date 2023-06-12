@@ -136,7 +136,7 @@ class ContinuationsCallsPhase extends PluginPhase:
     ctx
 
   override def transformApply(tree: Apply)(using ctx: Context): Tree =
-    if (tree.symbol.showFullName == "continuations.jvm.internal.SuspendApp.apply")
+    if (tree.symbol.showFullName == "continuations.SuspendApp.apply")
 
       val continuationClassRef = requiredClassRef(continuationFullName)
       val starterClassRef = requiredClassRef(starterClassName)

@@ -1,12 +1,10 @@
-package continuations.jvm.internal
-
-import continuations.Continuation
+package continuations
 
 abstract class Starter:
   def invoke[A](completion: Continuation[A]): A | Any | Null
 
 object Starter:
-  given Starter = Marker
+  given Starter = StartMarker
 
-object Marker extends Starter:
+object StartMarker extends Starter:
   override def invoke[A](completion: Continuation[A]): A | Any | Null = ???

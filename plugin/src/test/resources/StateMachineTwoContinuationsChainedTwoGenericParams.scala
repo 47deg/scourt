@@ -1,5 +1,5 @@
 package continuations {
-  import continuations.jvm.internal.SuspendApp
+  import continuations.SuspendApp
   @SourceFile("compileFromStringscala") case class Foo(x: Int) extends Object(), _root_.scala.Product, _root_.
     scala.Serializable {
     override def hashCode(): Int =
@@ -106,8 +106,8 @@ package continuations {
       new scala.runtime.ModuleSerializationProxy(classOf[continuations.compileFromStringpackage.type])
     def program: Any =
       {
-        private class $fooTest$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.jvm.internal.ContinuationImpl(
-          $completion, $completion.context) {
+        private class $fooTest$Frame($completion: continuations.Continuation[Any | Null]) extends continuations.ContinuationImpl($completion,
+          $completion.context) {
           var I$0: Any = _
           var I$1: Any = _
           var I$2: Any = _
@@ -127,7 +127,7 @@ package continuations {
               fooTest(null, null, this)
             }
           override def create(value: Any | Null, completion: continuations.Continuation[Any | Null]): continuations.Continuation[Unit] =
-            new continuations.jvm.internal.BaseContinuationImpl(completion)
+            new continuations.BaseContinuationImpl(completion)
         }
         def fooTest(a: A, b: B, completion: continuations.Continuation[B]):
           B | Null | (continuations.Continuation.State.Suspended : continuations.Continuation.State) =
@@ -196,13 +196,13 @@ package continuations {
                 }
             }
           }
-        continuations.jvm.internal.SuspendApp.apply(
+        continuations.SuspendApp.apply(
           {
-            private final class $anon() extends continuations.jvm.internal.Starter {
+            private final class $anon() extends continuations.Starter {
               override def invoke[A](completion: continuations.Continuation[A]): A | Any | Null =
                 fooTest(continuations.Foo.apply(1), continuations.Bar.apply(2), completion)
             }
-            new continuations.jvm.internal.Starter {...}
+            new continuations.Starter {...}
           }
         )
       }

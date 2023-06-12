@@ -1,7 +1,6 @@
 package continuations
 
 import scala.annotation.tailrec
-import continuations.jvm.internal.ContinuationStackFrame
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater
 import scala.concurrent.ExecutionContext
 import Continuation.State.*
@@ -70,5 +69,5 @@ class SafeContinuation[T] private (val delegate: Continuation[T])
 
 object SafeContinuation:
   def init[A](cont: Continuation[A]): SafeContinuation[A] =
-    import continuations.intrinsics.intercepted
+    import continuations.intercepted
     new SafeContinuation[A](delegate = cont.intercepted(cont.executionContext))

@@ -2,7 +2,7 @@ package continuations
 
 import continuations.DefDefTransforms.*
 import continuations.Types.flattenTypes
-import continuations.jvm.internal.ContinuationImpl
+import continuations.ContinuationImpl
 import dotty.tools.dotc.ast.{tpd, TreeTypeMap, Trees}
 import dotty.tools.dotc.ast.Trees.*
 import dotty.tools.dotc.ast.tpd.*
@@ -566,9 +566,8 @@ object DefDefTransforms extends TreesChecks:
     val continuationClassRef = requiredClassRef(continuationFullName)
     val continuationModule = requiredModule(continuationFullName)
     val safeContinuationClass = requiredClass("continuations.SafeContinuation")
-    val continuationImplClass = requiredClass("continuations.jvm.internal.ContinuationImpl")
-    val baseContinuationImplClassRef = requiredClassRef(
-      "continuations.jvm.internal.BaseContinuationImpl")
+    val continuationImplClass = requiredClass("continuations.ContinuationImpl")
+    val baseContinuationImplClassRef = requiredClassRef("continuations.BaseContinuationImpl")
 
     val parent = tree.symbol
     val treeOwner = parent.owner

@@ -1,6 +1,6 @@
 package continuations
 
-import continuations.Suspend.CompilerRewriteUnsuccessfulException
+import Suspend.CompilerRewriteUnsuccessfulException
 
 sealed trait Suspend:
   def continuation[A](f: Continuation[A] => Unit): A
