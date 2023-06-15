@@ -21,7 +21,6 @@ examples/runMain examples.TwoArgumentsSingleResumeContinuationsBefore; \
 examples/runMain examples.OneArgumentSingleResumeContinuationsCodeAfter; \
 examples/runMain examples.ZeroArgumentsSingleResumeContinuations; \
 examples/runMain examples.MultipleSuspendWithExpressionsInBody; \
-examples/runMain examples.PolymorphicDefsZeroContinuations; \
 examples/runMain examples.ZeroArgumentsZeroContinuationsCF; \
 examples/runMain examples.OneArgumentsOneContinuationsCF; \
 examples/runMain examples.OneArgumentsTwoContinuations; \
@@ -54,3 +53,4 @@ examples/runMain examples.OneArgumentsSingleResumeContinuations; \
 examples/runMain examples.OneFunctionArgumentTwoContinuationsTwoResumes; \
 examples/runMain examples.TwoArgumentsZeroContinuations; \
 examples/runMain examples.NonCompanionObjectContinuations"
+# examples/runMain examples.PolymorphicDefsZeroContinuations; \

@@ -16,7 +16,7 @@ import dotty.tools.dotc.core.Names.{termName, typeName}
 import dotty.tools.dotc.core.NameOps.*
 import dotty.tools.dotc.core.StdNames.nme
 import dotty.tools.dotc.core.Symbols.*
-import dotty.tools.dotc.core.Types.{MethodType, OrType, PolyType, RefinedType, Type}
+import dotty.tools.dotc.core.Types.{MethodType, OrNull, OrType, PolyType, RefinedType, Type}
 import dotty.tools.dotc.report
 import dotty.tools.dotc.transform.ContextFunctionResults
 
@@ -318,14 +318,10 @@ object DefDefTransforms extends TreesChecks:
       val suspendedState =
         ref(continuationObjectSym).select(termName("State")).select(termName("Suspended"))
 
-      val finalMethodReturnType: tpd.TypeTree =
-        tpd.TypeTree(
-          OrType(
-            OrType(ctx.definitions.AnyType, ctx.definitions.NullType, soft = false),
-            suspendedState.symbol.namedType,
-            soft = false)
-        )
-      createTransformedMethodSymbol(parent, transformedMethodParams, finalMethodReturnType.tpe)
+      val finalMethodReturnType: Type =
+        OrType(OrNull(returnType), suspendedState.symbol.namedType, soft = false)
+
+      createTransformedMethodSymbol(parent, transformedMethodParams, finalMethodReturnType)
     }
 
     deleteOldSymbol(parent)
