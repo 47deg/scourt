@@ -11,6 +11,7 @@ import dotty.tools.dotc.core.Names.{termName, typeName, Name}
 import dotty.tools.dotc.core.StdNames.{nme, tpnme}
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types.{MethodType, OrType, PolyType}
+import dotty.tools.dotc.core.NameOps.*
 import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.plugins.StandardPlugin
 import dotty.tools.dotc.transform.PickleQuotes
@@ -67,10 +68,26 @@ class ContinuationsCallsPhase extends PluginPhase:
   private val updatedMethods: mutable.ListBuffer[Symbol] = mutable.ListBuffer.empty
   private val applyToChange: mutable.ListBuffer[Tree] = ListBuffer.empty
 
-  private def existsTree(tree: Tree)(using Context): Option[Symbol] =
-    updatedMethods.find { s =>
-      tree.existsSubTree(t => s.name == t.symbol.name && s.coord == t.symbol.coord)
-    }
+  private def existsTree(tree: Tree)(using Context): Option[Tree] =
+    updatedMethods
+      .find { s =>
+        tree.existsSubTree(t => s.name == t.symbol.name && s.coord == t.symbol.coord)
+      }
+      .fold(Option.empty)(s =>
+        var sym = Option.empty[Symbol]
+        tree
+          .find {
+            case t @ Select(_, n) if n.matchesTargetName(s.name) =>
+              sym = Option(t.symbol)
+              true
+            case t @ Ident(n) if n.matchesTargetName(s.name) =>
+              sym = Option(t.symbol)
+              true
+            case _ =>
+              false
+          }
+          .map(_.subst(sym.toList, List(s)))
+      )
 
   private def findTree(tree: Tree)(using Context): Option[Symbol] =
     updatedMethods.find(s => s.name == tree.symbol.name && s.coord == tree.symbol.coord)
@@ -89,7 +106,7 @@ class ContinuationsCallsPhase extends PluginPhase:
     trees.filterNot(_.tpe.hasClassSymbol(requiredClass(suspendFullName)))
 
   private def treeExistsAndIsMethod(tree: Tree)(using Context): Boolean =
-    existsTree(tree).exists(_.is(Flags.Method))
+    existsTree(tree).exists(_.symbol.is(Flags.Method))
 
   private def treeExistsIsApplyAndIsMethod(tree: Tree, n: Name)(using Context): Boolean =
     n.asTermName == nme.apply &&
@@ -136,6 +153,7 @@ class ContinuationsCallsPhase extends PluginPhase:
     ctx
 
   override def transformApply(tree: Apply)(using ctx: Context): Tree =
+//<<<<<<< HEAD
     if (tree.symbol.showFullName == "continuations.jvm.internal.SuspendApp.apply")
 
       val continuationClassRef = requiredClassRef(continuationFullName)
@@ -160,6 +178,78 @@ class ContinuationsCallsPhase extends PluginPhase:
           }
 
           possible.headOption.fold(updatedMethods.toList.last)(_.symbol)
+//||||||| merged common ancestors
+//    val continuation: Tree = ref(
+//      requiredModule("continuations.jvm.internal.ContinuationStub").requiredMethod("contImpl"))
+//
+//    if (applyToChange.exists(_.sameTree(tree)))
+//      val (paramsNonCF, paramsCF) =
+//        tree.deepFold((List(List.empty[Tree]), List(List.empty[Tree]))) {
+//          case (
+//                (accNonCF, accCF),
+//                Apply(TypeApply(Select(qualifier, selected), argsType), args))
+//              if treeExistsIsApplyAndIsMethod(qualifier, selected) =>
+//            (accNonCF, accCF.prepended(removeSuspend(args)).prepended(removeSuspend(argsType)))
+//          case ((accNonCF, accCF), Apply(Select(qualifier, selected), args))
+//              if treeExistsIsApplyAndIsMethod(qualifier, selected) =>
+//            (accNonCF, accCF.prepended(removeSuspend(args)))
+//          case ((accNonCF, accCF), Apply(fun, args)) if treeExistsAndIsMethod(fun) =>
+//            (accNonCF.prepended(removeSuspend(args)), accCF)
+//          case (acc, _) => acc
+//        }
+//
+//      paramsCF
+//        .filterNot(_.isEmpty)
+//        .foldLeft(ref(existsTree(tree).get)
+//          .appliedToTermArgs(paramsNonCF.flatten :+ continuation): Tree) { (parent, value) =>
+//          val hasTypeTree = value.exists {
+//            case _: TypeTree => true
+//            case _ => false
+//          }
+//
+//          if (hasTypeTree)
+//            parent.select(nme.apply).appliedToTypeTrees(value)
+//          else
+//            parent match
+//              case _: TypeApply => parent.appliedToTermArgs(value)
+//              case _ => parent.select(nme.apply).appliedToTermArgs(value)
+//=======
+//    val continuation: Tree = ref(
+//      requiredModule("continuations.jvm.internal.ContinuationStub").requiredMethod("contImpl"))
+//
+//    if (applyToChange.exists(_.sameTree(tree)))
+//      val (paramsNonCF, paramsCF) =
+//        tree.deepFold((List(List.empty[Tree]), List(List.empty[Tree]))) {
+//          case (
+//                (accNonCF, accCF),
+//                Apply(TypeApply(Select(qualifier, selected), argsType), args))
+//              if treeExistsIsApplyAndIsMethod(qualifier, selected) =>
+//            (accNonCF, accCF.prepended(removeSuspend(args)).prepended(removeSuspend(argsType)))
+//          case ((accNonCF, accCF), Apply(Select(qualifier, selected), args))
+//              if treeExistsIsApplyAndIsMethod(qualifier, selected) =>
+//            (accNonCF, accCF.prepended(removeSuspend(args)))
+//          case ((accNonCF, accCF), Apply(fun, args)) if treeExistsAndIsMethod(fun) =>
+//            (accNonCF.prepended(removeSuspend(args)), accCF)
+//          case (acc, _) => acc
+//        }
+//
+//      paramsCF
+//        .filterNot(_.isEmpty)
+//        .foldLeft(
+//          existsTree(tree).get.appliedToTermArgs(paramsNonCF.flatten :+ continuation): Tree) {
+//          (parent, value) =>
+//            val hasTypeTree = value.exists {
+//              case _: TypeTree => true
+//              case _ => false
+//            }
+//
+//            if (hasTypeTree)
+//              parent.select(nme.apply).appliedToTypeTrees(value)
+//            else
+//              parent match
+//                case _: TypeApply => parent.appliedToTermArgs(value)
+//                case _ => parent.select(nme.apply).appliedToTermArgs(value)
+//>>>>>>> CU-8677bmjqw - Compiler Plugin: Suspend in abstract class
         }
 
       val starterClassSymbol = newCompleteClassSymbol(
@@ -218,7 +308,7 @@ class ContinuationsCallsPhase extends PluginPhase:
               case (acc, _) => acc
             }
 
-          ref(existsTree(tree).get).appliedToTermArgs(paramsNonCF.flatten :+ paramss.last.head)
+          existsTree(tree).get.appliedToTermArgs(paramsNonCF.flatten :+ paramss.last.head)
       )
 
       val newStarterClass = ClassDefWithParents(

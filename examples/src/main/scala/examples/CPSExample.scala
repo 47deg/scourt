@@ -200,7 +200,6 @@ def programOneContinuationReturnValue =
     2
   SuspendApp(zeroArgumentsSingleResumeContinuationsBeforeAfter())
 
-/*
 def programSuspendContinuationNoSuspendContinuationVal: Int =
   val fooTest: Suspend ?=> [A] => List[A] => [B] => List[B] => List[A] => List[A] => Int =
     [A] =>
@@ -213,7 +212,6 @@ def programSuspendContinuationNoSuspendContinuationVal: Int =
                 x.size + y.size + q.size + p.size + z
 
   fooTest(List(1))(List("A", "B"))(List(1, 1, 1))(List(1, 1, 1, 1))
- */
 
 // runs only with scalac
 object ExampleObject:

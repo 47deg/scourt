@@ -11,16 +11,16 @@ package continuations {
     def program: Any =
       {
         case class Foo(i: Int) extends Object(), _root_.scala.Product, _root_.scala.Serializable {
-          override def hashCode(): Int =
+          override def hashCode(): Int = 
             {
               var acc: Int = -889275714
               acc = scala.runtime.Statics#mix(acc, this.productPrefix.hashCode())
               acc = scala.runtime.Statics#mix(acc, Foo.this.i)
               scala.runtime.Statics#finalizeHash(acc, 1)
             }
-          override def equals(x$0: Any): Boolean =
+          override def equals(x$0: Any): Boolean = 
             this.eq(x$0.$asInstanceOf[Object]).||(
-              x$0 match
+              x$0 match 
                 {
                   case x$0 @ _:Foo @unchecked => this.i.==(x$0.i).&&(x$0.canEqual(this))
                   case _ => false
@@ -30,14 +30,14 @@ package continuations {
           override def canEqual(that: Any): Boolean = that.isInstanceOf[Foo @unchecked]
           override def productArity: Int = 1
           override def productPrefix: String = "Foo"
-          override def productElement(n: Int): Any =
-            n match
+          override def productElement(n: Int): Any = 
+            n match 
               {
                 case 0 => this._1
                 case _ => throw new IndexOutOfBoundsException(n.toString())
               }
-          override def productElementName(n: Int): String =
-            n match
+          override def productElementName(n: Int): String = 
+            n match 
               {
                 case 0 => "i"
                 case _ => throw new IndexOutOfBoundsException(n.toString())
@@ -56,7 +56,7 @@ package continuations {
           def fromProduct(x$0: Product): continuations.compileFromString$package.Foo.MirroredMonoType =
             new Foo(x$0.productElement(0).$asInstanceOf[Int])
         }
-        def foo(a: A, completion: continuations.Continuation[A | Any]): Any = a
+        def foo(a: A, completion: continuations.Continuation[A]): A | Null | continuations.Continuation.State.Suspended.type = a
         continuations.jvm.internal.SuspendApp.apply(
           {
             private final class $anon() extends continuations.jvm.internal.Starter {

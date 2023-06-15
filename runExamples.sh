@@ -53,4 +53,5 @@ examples/runMain examples.ZeroArgumentsCodeBefore; \
 examples/runMain examples.OneArgumentsSingleResumeContinuations; \
 examples/runMain examples.OneFunctionArgumentTwoContinuationsTwoResumes; \
 examples/runMain examples.TwoArgumentsZeroContinuations; \
+examples/runMain examples.AbstractClassContinuations; \
 examples/runMain examples.NonCompanionObjectContinuations"
